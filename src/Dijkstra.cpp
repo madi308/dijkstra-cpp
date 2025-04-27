@@ -27,9 +27,13 @@ std::vector<std::shared_ptr<Node>> Dijkstra::readGraph(std::string &fileName) {
         std::stringstream ss{line};
         std::string info;
         getline(ss, info, '\t');
-        auto node = std::make_shared<Node>(info);
-        if (!nodes.contains(info))
+        std::shared_ptr<Node> node;
+        if (nodes.contains(info)) {
+            node = nodes.at(info);
+        } else {
+            node = std::make_shared<Node>(info);
             insertionOrder.push_back(node);
+        }
         nodes[info] = node;
     }
     buffer.clear();

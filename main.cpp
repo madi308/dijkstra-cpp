@@ -9,12 +9,15 @@ int main() {
     std::cin >> fileName;
     const auto graph = Dijkstra::readGraph(fileName);
 
+    std::cout << "All edges:\n";
     for (const auto& node : graph) {
         std::cout << *node;
     }
 
+    std::cout << "---------------------------\n";
+    std::cout << "Shortest paths from " << graph.at(0)->info << '\n';
     for (auto dijkstra = Dijkstra::dijkstra(graph.at(0), graph);
         const auto&[fst, snd] : dijkstra) {
-        std::cout << fst << " " << snd << '\n';
+        std::cout << "to " << fst << " " << snd << '\n';
     }
 }

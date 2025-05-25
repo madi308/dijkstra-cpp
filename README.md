@@ -18,3 +18,8 @@ IMPORTANT: If there is a node that is not a source of any edges, it should be ad
 `node_name`
 
 There is also an `example_data.tsv` file that includes an example graph. The source node of the graph will be the source node of the first line in the data file.
+
+## Output
+There are two different outputs:
+- All edges grouped by the source node
+- The shortest paths from the source node to other nodes

@@ -7,6 +7,7 @@ include_directories(inc)
 
 add_executable(dijkstra-cpp main.cpp
         src/Dijkstra.cpp
+        src/Node.cpp
 )
 
 target_compile_options(dijkstra-cpp PRIVATE)

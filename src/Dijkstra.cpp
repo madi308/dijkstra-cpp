@@ -12,8 +12,7 @@
 std::vector<std::shared_ptr<Node>> Dijkstra::readGraph(std::string &fileName) {
     std::fstream file(fileName, std::ios::in);
     if (!file.is_open()) {
-        std::cout << "File not found: " << fileName;
-        return {};
+        throw std::runtime_error("File not found: " + fileName);
     }
     std::stringstream buffer;
     buffer << file.rdbuf();
@@ -56,7 +55,7 @@ std::vector<std::shared_ptr<Node>> Dijkstra::readGraph(std::string &fileName) {
 }
 
 // Some inspiration: https://www.geeksforgeeks.org/dijkstras-shortest-path-algorithm-greedy-algo-7/
-std::unordered_map<std::string, int> Dijkstra::dijkstra(std::shared_ptr<Node> initial,
+std::unordered_map<std::string, int> Dijkstra::dijkstra(const std::shared_ptr<Node>& initial,
                                                         const std::vector<std::shared_ptr<Node>> &graph) {
     using Pair = std::pair<int, std::shared_ptr<Node>>;
     auto comparator = [](const Pair &a, const Pair &b) {
@@ -64,24 +63,23 @@ std::unordered_map<std::string, int> Dijkstra::dijkstra(std::shared_ptr<Node> in
     };
     std::priority_queue<Pair, std::vector<Pair>, decltype(comparator)> pq(comparator);
     std::unordered_map<std::string, int> dist;
-    for (const auto node : graph) {
+    for (const auto& node : graph) {
         dist[node->info] = INT_MAX;
     }
 
     dist[initial->info] = 0;
-    pq.push({0, initial});
+    pq.emplace(0, initial);
 
     while (!pq.empty()) {
-        std::shared_ptr<Node> u = pq.top().second;
+        const std::shared_ptr<Node> u = pq.top().second;
         pq.pop();
 
-        for (const auto edge : u->edges) {
+        for (const auto& edge : u->edges) {
             auto otherNode = edge.to;
-            int weight = edge.weight;
 
-            if (dist[otherNode->info] > dist[u->info] + weight) {
+            if (const int weight = edge.weight; dist[otherNode->info] > dist[u->info] + weight) {
                 dist[otherNode->info] = dist[u->info] + weight;
-                pq.push({dist[otherNode->info], otherNode});
+                pq.emplace(dist[otherNode->info], otherNode);
             }
         }
     }
